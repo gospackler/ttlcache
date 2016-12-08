@@ -47,6 +47,14 @@ func (cache *Cache) Get(key string) ([]byte, bool) {
 	return item.data, true
 }
 
+// Evict offers a thread-safe way to evict a cache item by key.
+func (cache *Cache) Evict(key string) {
+	cache.Lock()
+	defer cache.Unlock()
+
+	delete(cache.items, key)
+}
+
 // Count returns the number of items in the cache
 func (cache *Cache) Count() int {
 	cache.RLock()

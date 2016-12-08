@@ -26,6 +26,21 @@ func TestGet(t *testing.T) {
 	}
 }
 
+func TestEvict(t *testing.T) {
+	cache := &Cache{
+		ttl:   time.Second,
+		items: map[string]*Item{},
+	}
+
+	cache.Set("hello", []byte("world"))
+	cache.Evict("hello")
+
+	_, exists := cache.Get("hello")
+	if exists {
+		t.Errorf("Expected cache item to be evicted for key `hello`")
+	}
+}
+
 func TestExpiration(t *testing.T) {
 	cache := &Cache{
 		ttl:   time.Second,
